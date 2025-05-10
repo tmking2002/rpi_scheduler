@@ -102,13 +102,8 @@ with tabs[0]:
     if len(invalid_opponents) > 0:
         st.warning(f"These opponent names are not recognized: {', '.join(invalid_opponents)}")
 
-
-    # Export or clear
-    col1, col2 = st.columns(2)
-    with col1:
-        if st.button("Download Schedule as CSV"):
-            csv = edited_df.to_csv(index=False).encode('utf-8')
-            st.download_button("Download CSV", csv, "schedule.csv", "text/csv")
+    csv = edited_df.to_csv(index=False).encode('utf-8')
+    st.download_button("Download CSV", csv, "schedule.csv", "text/csv")
 
 with tabs[1]:
 
