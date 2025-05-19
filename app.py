@@ -67,6 +67,20 @@ with tabs[0]:
 
     team_names = st.selectbox(label='Proper Team Names for Input', options=teams)
 
+    uploaded_file = st.file_uploader("Upload Schedule CSV (must include 'Opponent' and 'Game Type' columns)", type=["csv"])
+
+    if uploaded_file is not None:
+        try:
+            uploaded_df = pd.read_csv(uploaded_file)
+            if {'Opponent', 'Game Type'}.issubset(uploaded_df.columns):
+                st.session_state.schedule = uploaded_df
+                editable_schedule = uploaded_df
+                st.success("Schedule uploaded successfully!")
+            else:
+                st.error("CSV must contain 'Opponent' and 'Game Type' columns.")
+        except Exception as e:
+            st.error(f"Error reading CSV: {e}")
+
     def update_schedule():
         st.session_state.schedule = st.session_state.schedule_editor.copy()
 
@@ -75,7 +89,7 @@ with tabs[0]:
             editable_schedule,
             num_rows="dynamic",
             use_container_width=True,
-            height=1000,  # Increase as needed to fit your dataset
+            height=1000,
             key="schedule_editor",
             on_change=update_schedule
         )
